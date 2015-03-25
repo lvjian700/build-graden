@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/com.simple.plugin.feature_1.0.0.qualifier.jar" id="com.simple.plugin.feature" version="1.0.0.qualifier">
+      <category name="com.simple.plugin.updatesite"/>
+   </feature>
+   <category-def name="com.simple.plugin.updatesite" label="Simple plugin updatesite">
+      <description>
+         333
+      </description>
+   </category-def>
+</site>

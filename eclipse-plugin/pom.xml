@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+    xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.simple.plugin</groupId>
+    <artifactId>parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>simple plugin project</name>
+
+    <modules>
+        <module>com.simple.plugin.core</module>
+        <module>com.simple.plugin.core.test</module>
+        <module>com.simple.plugin.feature</module>
+        <module>com.simple.plugin.updatesite</module>
+    </modules>
+
+    <properties>
+        <os-jvm-flags></os-jvm-flags>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <tycho.version>0.22.0</tycho.version>
+        <tycho-extras.version>0.22.0</tycho-extras.version>
+        <checkstyle.version>2.13</checkstyle.version>
+
+        <!--  nexus server configuration
+        <nexus-url>localhost:8081</nexus-url>
+        <p2-url>http://${nexus-url}/nexus/content/groups/p2-group/</p2-url>
+        -->
+
+        <jacoco.destFile>${project.basedir}/../target/jacoco.exec</jacoco.destFile>
+        <sonar.language>java</sonar.language>
+        <sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
+        <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+        <sonar.jacoco.reportDir>${project.basedir}/../target/jacoco/</sonar.jacoco.reportDir>
+        <sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
+    </properties>
+
+    <!-- it need install p2 repository plugin to nexus. And add eclipse & SWTBot repository to nexus
+    <repositories>
+        <repository>
+            <id>juno</id>
+            <layout>p2</layout>
+            <url>${p2-url}</url>
+        </repository>
+    </repositories>
+    -->
+
+    <repositories>
+        <repository>
+            <id>juno</id>
+            <layout>p2</layout>
+            <url>http://download.eclipse.org/releases/juno</url>
+        </repository>
+    </repositories>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.eclipse.tycho</groupId>
+                <artifactId>tycho-maven-plugin</artifactId>
+                <version>${tycho.version}</version>
+                <extensions>true</extensions>
+            </plugin>
+            <plugin>
+                <groupId>org.eclipse.tycho</groupId>
+                <artifactId>tycho-compiler-plugin</artifactId>
+                <version>${tycho.version}</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.eclipse.tycho</groupId>
+                <artifactId>target-platform-configuration</artifactId>
+                <version>${tycho.version}</version>
+                <configuration>
+                    <environments>
+                        <environment>
+                            <os>linux</os>
+                            <ws>gtk</ws>
+                            <arch>x86</arch>
+                        </environment>
+                        <environment>
+                            <os>linux</os>
+                            <ws>gtk</ws>
+                            <arch>x86_64</arch>
+                        </environment>
+                        <environment>
+                            <os>win32</os>
+                            <ws>win32</ws>
+                            <arch>x86</arch>
+                        </environment>
+                        <environment>
+                            <os>win32</os>
+                            <ws>win32</ws>
+                            <arch>x86_64</arch>
+                        </environment>
+                        <environment>
+                            <os>macosx</os>
+                            <ws>cocoa</ws>
+                            <arch>x86_64</arch>
+                        </environment>
+                    </environments>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.7.1.201405082137</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <include>com.simple.plugin.core.*</include>
+                    <destFile>${jacoco.destFile}</destFile>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                        <configuration>
+                            <!-- Where to put jacoco coverage report -->
+                            <destFile>${sonar.jacoco.reportPath}</destFile>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <configuration>
+                            <dataFile>${sonar.jacoco.reportPath}</dataFile>
+                            <outputDirectory>${sonar.jacoco.reportDir}</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>2.0</version>
+            </plugin>
+        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.eclipse.tycho</groupId>
+                    <artifactId>tycho-packaging-plugin</artifactId>
+                    <version>${tycho.version}</version>
+                    <configuration>
+                        <format>yyyyMMddHHmm</format>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.eclipse.tycho</groupId>
+                    <artifactId>tycho-p2-plugin</artifactId>
+                    <version>${tycho.version}</version>
+                    <configuration>
+                        <baselineRepositories>
+                            <repository>
+                                <url>${p2-url}</url>
+                            </repository>
+                        </baselineRepositories>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>ui-test</id>
+            <modules>
+                <module>com.simple.plugin.uitest</module>
+            </modules>
+            <repositories>
+                <!-- nexus
+                <repository>
+                    <id>swtbot</id>
+                    <layout>p2</layout>
+                    <url>${p2-url}</url>
+                </repository>
+                -->
+                <repository>
+                    <id>swtbot</id>
+                    <layout>p2</layout>
+                    <url>http://download.eclipse.org/technology/swtbot/releases/latest/</url>
+                </repository>
+            </repositories>
+        </profile>	
+        <profile>
+            <id>macosx-jvm-flags</id>
+            <activation>
+                <os><family>mac</family></os>
+            </activation>
+            <properties>
+                <os-jvm-flags>-XstartOnFirstThread</os-jvm-flags>
+            </properties>
+        </profile>
+    </profiles>
+</project>
+
