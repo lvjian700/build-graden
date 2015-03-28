@@ -56,6 +56,11 @@
             <layout>p2</layout>
             <url>http://download.eclipse.org/releases/juno</url>
         </repository>
+        <repository>
+            <id>swtbot</id>
+            <layout>p2</layout>
+            <url>http://download.eclipse.org/technology/swtbot/releases/latest/</url>
+        </repository>
     </repositories>
 
     <build>
@@ -179,21 +184,7 @@
             <modules>
                 <module>com.simple.plugin.uitest</module>
             </modules>
-            <repositories>
-                <!-- nexus
-                <repository>
-                    <id>swtbot</id>
-                    <layout>p2</layout>
-                    <url>${p2-url}</url>
-                </repository>
-                -->
-                <repository>
-                    <id>swtbot</id>
-                    <layout>p2</layout>
-                    <url>http://download.eclipse.org/technology/swtbot/releases/latest/</url>
-                </repository>
-            </repositories>
-        </profile>	
+        </profile>
         <profile>
             <id>macosx-jvm-flags</id>
             <activation>
